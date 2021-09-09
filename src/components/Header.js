@@ -1,7 +1,7 @@
 import React from "react"
 
 export default function Header(props) {
-    const {cartQty} = props
+    const {cartQty, changeLoginTab} = props
     return (
         <header className="row block">
             <div>
@@ -11,7 +11,7 @@ export default function Header(props) {
             </div>
             <div className="center">
                 {/* add logout button & logic */}
-                <button className="headerButton">Login</button>
+                <button onClick={(e) => changeLoginTab(e)} id="loginButton" className="headerButton">Login</button>
                 <button className="headerButton">
                     Cart {
                         cartQty === 0 ? " " : <div className="badge">{cartQty}</div>
