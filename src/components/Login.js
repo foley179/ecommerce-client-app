@@ -9,6 +9,7 @@ export default function Login(props) {
     }
 
     function handleClose(e) {
+        // refresh state to "login" so login tab shows on initial click
         setTabType("login")
         changeLoginTab(e)
     }

@@ -3,8 +3,9 @@ import React from "react"
 export default function Cart(props) {
     const {cartItems, onAdd, onRemove} = props
     const itemsPrice = cartItems.reduce((acc, cur) => acc + (cur.price * cur.qty), 0)
-    const shippingPrice = itemsPrice > 2000 ? 0 : 30
+    const shippingPrice = itemsPrice > 1999 ? 0 : 30
     const totalPrice = itemsPrice + shippingPrice
+
     return (
         <aside className="block col-1">
             <h2>Cart Items</h2>
@@ -37,7 +38,7 @@ export default function Cart(props) {
                     <div className="col-2 text-right"><strong>£{totalPrice.toFixed(2)}</strong></div>
                 </div>
                 <div className="row">
-                    <button  className="button">Checkout</button> {/* need an onClick */}
+                    <button className="button">Checkout</button> {/* need an onClick */}
                 </div>
                 </>
             )}
