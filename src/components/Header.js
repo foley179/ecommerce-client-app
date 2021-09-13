@@ -1,7 +1,6 @@
 import {Link} from "react-router-dom"
 
-export default function Header(props) {
-    const {cartQty} = props
+export default function Header() {
     return (
         <header className="row block">
             <div>
@@ -13,11 +12,6 @@ export default function Header(props) {
                 {/* add logout button & logic */}
                 <Link to="/signup"><button id="loginButton" className="headerButton">Signup</button></Link>
                 <Link to="/login"><button id="loginButton" className="headerButton">Login</button></Link>
-                <button className="headerButton">
-                    Cart {
-                        cartQty === 0 ? " " : <div className="badge">{cartQty}</div>
-                    }
-                </button>
             </div>
         </header>
     )

@@ -47,14 +47,11 @@ function App() {
     }
   }
 
-  // hooks
-
-
   // render
   return (
     <AuthProvider>
       <Router>
-        <Header cartQty={cartItems.length} />
+        <Header />
         <div className="row">
           <Switch>
             <Route exact path="/">

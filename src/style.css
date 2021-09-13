@@ -94,15 +94,6 @@ button.remove {
     background-color: red;
     width: 1.5rem;
 }
-.badge {
-    display: inline;
-    background-color: red;
-    border: 1px solid black;
-    color: white;
-    width: 1.5rem;
-    padding: 0.1rem;
-    border-radius: 0.3rem;
-}
 /* login page */
 .login{
     color: black;
