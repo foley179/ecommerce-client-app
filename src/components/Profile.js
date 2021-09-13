@@ -1,9 +1,11 @@
+import { useAuth } from "../contexts/authcontext"
 
+export default function Profile() {
+    const {currentUser} = useAuth()
 
-export default function Profile(props) {
     return (
-        <main className="block col-2">
-            Users Profile Page            
+        <main className="block col-2 profile">
+            <h2>{currentUser.username}'s Profile Page</h2>
         </main>
     )
 }

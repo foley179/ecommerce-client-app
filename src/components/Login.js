@@ -17,9 +17,7 @@ export default function Login() {
             history.push("/profile")
             console.log("login successful") // testing
         } catch (err) {
-            // using log because error is not showing
-            console.log("errormessage: " + err.message)
-            setError("login unsuccessful")
+            setError(err.message)
         }
     }
 
@@ -28,8 +26,7 @@ export default function Login() {
             <h2>Login</h2>
             <hr />
             <form onSubmit={handleSubmit} >
-                {/* error does not work, cannot currently find work around */}
-                {error !== null ? <div id="loginError">{error}</div> : ""}
+                {error !== null ? <div className="loginError">{error}</div> : ""}
                 <input type="email" placeholder="Enter Your Email" className="txt" required ref={emailRef} />
                 <input type="password" placeholder="Enter Your Password" className="txt" required ref={passwordRef} />
                 <button type="submit" className="loginbutton button">Login</button>

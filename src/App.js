@@ -9,6 +9,7 @@ import Login from './components/Login'
 import Profile from './components/Profile'
 import Signup from './components/Signup'
 import PwReset from './components/PwReset'
+import PrivateRoute from './components/PrivateRoute'
 
 function App() {
   const {products} = data
@@ -57,9 +58,9 @@ function App() {
             <Route exact path="/">
               <Main onAdd={onAdd} products={products} />
             </Route>
-            <Route path="/profile">
+            <PrivateRoute path="/profile">
               <Profile />
-            </Route>
+            </PrivateRoute>
             <Route path="/signup">
               <Signup />
             </Route>

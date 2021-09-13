@@ -12,20 +12,20 @@ export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(null)
 
     const {users} = data // mock data
+
     function login(email, password) {
         console.log("login attempt") // only for testing
         // for testing purposes, this will be removed and changed for a proper validation
         const user = users.filter((item) => (email === item.email))
-        if (user.length === 0) {
-            throw Error("no user with that email")
-        } else if (user[0].password !== password) {
-            throw Error("password incorrect")
+        if (user.length === 0 || user[0].password !== password) {
+            throw Error("Email or password incorrect please try again")
         } else {
-            setCurrentUser(user)
+            setCurrentUser(user[0])
             return currentUser
         }
     }
-    function signup(email, password) {
+
+    function signup(username, email, password) {
         console.log("signup attempt") // for testing
         const exist = users.filter((item) => (email === item.email))
         if (exist.length !== 0) {
@@ -33,7 +33,7 @@ export function AuthProvider({children}) {
         } else {
             const user = {
                 id: users.length + 1,
-                username: "username (to be added)",
+                username: username,
                 email: email,
                 password: password // to be hashed & salted
             }
@@ -43,9 +43,17 @@ export function AuthProvider({children}) {
         }
     }
 
+    function logout() {
+        console.log("logged out") // for testing
+        setCurrentUser(null)
+        return currentUser
+    }
+
+    // exports these out to be used in other components
     const value = {
         currentUser,
         login,
+        logout,
         signup
     }
 

@@ -22,9 +22,15 @@ const data = {
     users: [
         {
             id: 1,
-            username: "myUserName",
+            username: "user name",
             email: "eg@eg.com",
             password: "password"
+        },
+        {
+            id: 2,
+            username: "other user name",
+            email: "eg2@eg.com",
+            password: "1234"
         },
     ]
 }

@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/authcontext'
 export default function Signup() {
     const {signup} = useAuth()
     const [error, setError] = useState(null)
+    const usernameRef = useRef()
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
@@ -20,8 +21,8 @@ export default function Signup() {
             return
         }
         try {
-            await signup(emailRef.current.value, passwordRef.current.value)
-            history.pushState("/profile")
+            await signup(usernameRef.current.value, emailRef.current.value, passwordRef.current.value)
+            history.push("/profile")
             console.log("signup successful") // testing
         } catch (err) {
             // using log because error is not showing
@@ -36,7 +37,8 @@ export default function Signup() {
             <hr />
             <form onSubmit={handleSubmit}>
                 {/* error does not work, cannot currently find work around */}
-                {error !== null ? <div id="loginError">{error}</div> : ""}
+                {error !== null ? <div className="loginError">{error}</div> : ""}
+                <input type="text" placeholder="Enter A Username" className="txt" required ref={usernameRef} />
                 <input type="email" placeholder="Enter Your Email" className="txt" required ref={emailRef} />
                 <input type="password" placeholder="Enter Your Password" className="txt" required ref={passwordRef} />
                 <input type="password" placeholder="Re-Enter Your Password" className="txt" required ref={passwordConfirmRef} />
