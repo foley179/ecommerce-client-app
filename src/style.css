@@ -25,6 +25,10 @@ a {
 hr {
     color: #b3b3b3;
 }
+#loginError {
+    display: none;
+    color: red;
+}
 /* position */
 .row {
     display: flex;
@@ -99,27 +103,10 @@ button.remove {
     padding: 0.1rem;
     border-radius: 0.3rem;
 }
-/* login tab */
-#overlay {
-    display: none;
-	background-color: rgba(0, 0, 0, 0.5);
-	height: 100%;
-	width: 100%;
-	position: fixed;
-	top: 0px;
-    left: 0px;
-}
-#login{
-	background-color: darkgrey;
+/* login page */
+.login{
     color: black;
-	width: 30%;
-	margin: auto;
-	border: 3px solid darkgreen;
-	border-radius: 10px;
-	padding: 20px;
 	text-align: center;
-	position: relative;
-	top: 50px;
 }
 .txt {
 	background-color: white;

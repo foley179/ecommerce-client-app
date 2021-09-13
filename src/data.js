@@ -18,6 +18,14 @@ const data = {
             price: 30,
             image: "./resources/keyboard.jpg"
         }
+    ],
+    users: [
+        {
+            id: 1,
+            username: "myUserName",
+            email: "eg@eg.com",
+            password: "password"
+        },
     ]
 }
 

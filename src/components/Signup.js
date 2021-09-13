@@ -1,21 +1,28 @@
-import {useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useAuth } from '../contexts/authcontext'
 
-export default function Login() {
-    const {login} = useAuth()
+export default function Signup() {
+    const {signup} = useAuth()
     const [error, setError] = useState(null)
     const emailRef = useRef()
     const passwordRef = useRef()
+    const passwordConfirmRef = useRef()
     const history = useHistory()
 
     // functions
     async function handleSubmit(e) {
         e.preventDefault()
+        if (passwordRef.current.value !== passwordConfirmRef.current.value || passwordRef.current.value === "") {
+            // need to change password empty part
+            console.log("passwords do not match")
+            setError("passwords do not match")
+            return
+        }
         try {
-            await login(emailRef.current.value, passwordRef.current.value)
-            history.push("/profile")
-            console.log("login successful") // testing
+            await signup(emailRef.current.value, passwordRef.current.value)
+            history.pushState("/profile")
+            console.log("signup successful") // testing
         } catch (err) {
             // using log because error is not showing
             console.log("errormessage: " + err.message)
@@ -25,16 +32,16 @@ export default function Login() {
 
     return (
         <div className="block col-2 login">
-            <h2>Login</h2>
+            <h2>Signup</h2>
             <hr />
-            <form onSubmit={handleSubmit} >
+            <form onSubmit={handleSubmit}>
                 {/* error does not work, cannot currently find work around */}
                 {error !== null ? <div id="loginError">{error}</div> : ""}
                 <input type="email" placeholder="Enter Your Email" className="txt" required ref={emailRef} />
                 <input type="password" placeholder="Enter Your Password" className="txt" required ref={passwordRef} />
-                <button type="submit" className="loginbutton button">Login</button>
-                <Link to="/signup"> <button className="loginbutton button">No Account? Sign Up</button></Link>
-                <Link to="/pwReset"> <button className="loginbutton button">Forgot Your Password?</button></Link>
+                <input type="password" placeholder="Re-Enter Your Password" className="txt" required ref={passwordConfirmRef} />
+                <button type="submit" className="loginbutton button">Sign up</button>
+                <Link to="/login"> <button className="loginbutton button">Go To Login</button></Link>
             </form>
         </div>
     )

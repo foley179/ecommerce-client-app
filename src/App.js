@@ -1,15 +1,18 @@
-import React from 'react'
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import { AuthProvider } from './contexts/authcontext'
+import data from './data' // mock data
 import Cart from './components/Cart'
 import Header from './components/Header'
 import Main from './components/Main'
-import data from './data'
 import Login from './components/Login'
+import Profile from './components/Profile'
+import Signup from './components/Signup'
+import PwReset from './components/PwReset'
 
 function App() {
   const {products} = data
   const [cartItems, setCartItems] = useState([])
-  const [loginTab, setLoginTab] = useState("none")
 
   // functions
   function onAdd(product) {
@@ -44,32 +47,36 @@ function App() {
     }
   }
 
-  function changeLoginTab(e) {
-    // change state for login tab
-    e.preventDefault()
-    if (loginTab === "none") {
-      setLoginTab("block")
-    } else {
-      setLoginTab("none")
-    }
-  }
-
   // hooks
-  useEffect(() => {
-    // hide/show login tab
-    document.getElementById("overlay").style.display = loginTab
-  }, [loginTab])
+
 
   // render
   return (
-    <>
-      <Header changeLoginTab={changeLoginTab} cartQty={cartItems.length} />
-      <Login changeLoginTab={changeLoginTab} />
-      <div className="row">
-        <Main onAdd={onAdd} products={products} />
-        <Cart onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} />
-      </div>
-    </>
+    <AuthProvider>
+      <Router>
+        <Header cartQty={cartItems.length} />
+        <div className="row">
+          <Switch>
+            <Route exact path="/">
+              <Main onAdd={onAdd} products={products} />
+            </Route>
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/pwReset">
+              <PwReset />
+            </Route>
+          </Switch>
+          <Cart onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} />
+        </div>
+      </Router>
+    </AuthProvider>
   )
 }
 
