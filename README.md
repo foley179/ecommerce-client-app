@@ -15,8 +15,6 @@
 A project for a full stack engineer course from codecademy.
 
 --------------------------------------------------------------
-## Screenshots
-![Example screenshot](./img/screenshot.png)
 
 ## Technologies
 * node.js
@@ -28,7 +26,7 @@ A project for a full stack engineer course from codecademy.
 * login/out functionality
 * constantly updating cart
 
-To-do list:
+## To-do list:
 * Add a database
 * Add an API to connect front and back end
 * Add a checkout with billing etc
