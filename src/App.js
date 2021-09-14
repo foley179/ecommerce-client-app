@@ -51,8 +51,8 @@ function App() {
 
   // render
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Header />
         <div className="row">
           <Switch>
@@ -77,8 +77,8 @@ function App() {
           </Switch>
           <Cart onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} />
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   )
 }
 
