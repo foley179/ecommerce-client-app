@@ -43,6 +43,28 @@ export function AuthProvider({children}) {
         }
     }
 
+    function updateProfile(newUsername, newPassword, currUser) {
+        console.log("update attempt")
+        let updatedUser
+        try {
+            if (newPassword === "") {
+                updatedUser = {...currUser, username: newUsername}
+                users.map((user) => currUser.id !== user.id ? user : updatedUser)
+            } else if(newUsername === "") {
+                updatedUser = {...currUser, password: newPassword}
+                users.map((user) => currUser.id !== user.id ? user : updatedUser)
+            } else {
+                updatedUser = {...currUser, username: newUsername, password: newPassword}
+                users.map((user) => currUser.id !== user.id ? user : updatedUser)
+            }
+        } catch {
+            throw new Error("Error updating profile please try again")
+        }
+        console.log("update user = " + updatedUser.username)
+        setCurrentUser(updatedUser)
+        return currentUser
+    }
+
     function logout() {
         console.log("logged out") // for testing
         setCurrentUser(null)
@@ -54,6 +76,7 @@ export function AuthProvider({children}) {
         currentUser,
         login,
         logout,
+        updateProfile,
         signup
     }
 
