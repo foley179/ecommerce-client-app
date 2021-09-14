@@ -25,6 +25,9 @@ a {
 hr {
     color: #b3b3b3;
 }
+strong {
+    font-size: 1.1rem;
+}
 /* position */
 .row {
     display: flex;
@@ -90,7 +93,7 @@ button.remove {
     background-color: red;
     width: 1.5rem;
 }
-/* login page */
+/* login/signup page */
 .login{
     color: black;
 	text-align: center;
@@ -102,7 +105,8 @@ button.remove {
 	border-radius: 10px;
 	padding: 5px;
 	margin: auto;
-	margin-bottom: 15px
+	margin-bottom: 15px;
+    width: 47%;
 }
 .loginError {
     color: red;

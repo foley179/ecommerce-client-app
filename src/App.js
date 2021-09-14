@@ -10,6 +10,7 @@ import Profile from './components/Profile'
 import Signup from './components/Signup'
 import PwReset from './components/PwReset'
 import PrivateRoute from './components/PrivateRoute'
+import UpdateProfile from './components/UpdateProfile'
 
 function App() {
   const {products} = data
@@ -60,6 +61,9 @@ function App() {
             </Route>
             <PrivateRoute path="/profile">
               <Profile />
+            </PrivateRoute>
+            <PrivateRoute path="/updateProfile">
+              <UpdateProfile />
             </PrivateRoute>
             <Route path="/signup">
               <Signup />
