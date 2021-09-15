@@ -11,6 +11,8 @@ import Signup from './components/Signup'
 import PwReset from './components/PwReset'
 import PrivateRoute from './components/PrivateRoute'
 import UpdateProfile from './components/UpdateProfile'
+import Checkout from './components/checkout/Checkout'
+import Payment from './components/checkout/Payment'
 
 function App() {
   const {products} = data
@@ -73,6 +75,12 @@ function App() {
             </Route>
             <Route path="/pwReset">
               <PwReset />
+            </Route>
+            <Route path="/checkout">
+              <Checkout />
+            </Route>
+            <Route path="/payment">
+              <Payment />
             </Route>
           </Switch>
           <Cart onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} />

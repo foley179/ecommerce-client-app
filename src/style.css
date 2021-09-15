@@ -120,3 +120,18 @@ button.remove {
 .profile {
     text-align: center;
 }
+/* checkout page */
+.checkout {
+    text-align: center;
+}
+.txt25 {
+    width: 25%;
+    display: inline;
+    margin-bottom: 0px;
+    margin-left: 5px;
+}
+.txt100 {
+    width: 50%;
+    display: block;
+    margin: 10px auto;
+}
