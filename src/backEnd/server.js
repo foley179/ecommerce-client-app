@@ -23,6 +23,7 @@ app.use(express.json())
 
 //routes
 app.get("/", (req, res) => {
+    // for testing
     console.log("get request")
 })
 
@@ -34,12 +35,14 @@ app.post("/checkout", async (req, res) => {
     try {
         const {totalPrice, cartItems, token} = req.body
 
+        // for description in charges info (below)
         let description = ""
         if (cartItems.length === 1) {
             description = cartItems[0].name
         } else if (cartItems.length > 1) {
             description = "Multiple items"
         }
+
         // create a customer (details can be found on your stripe account after purchase)
         // currently creating dupes must fix
         const customer = await stripe.customers.create({

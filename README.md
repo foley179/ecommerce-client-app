@@ -29,7 +29,7 @@ A project for a full stack engineer course from codecademy.
 ## To-do list:
 * Add a database
 * Add an API to connect front and back end
-* Add a checkout with billing etc
+* Filter for "testing" in code and delete where appropriate
 
 ## Status
 Project is: _in progress_
