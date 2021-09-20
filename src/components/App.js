@@ -1,18 +1,18 @@
 import {useState} from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
-import { AuthProvider } from './contexts/authcontext'
-import data from './data' // mock data
-import Cart from './components/Cart'
-import Header from './components/Header'
-import Main from './components/Main'
-import Login from './components/Login'
-import Profile from './components/Profile'
-import Signup from './components/Signup'
-import PwReset from './components/PwReset'
-import PrivateRoute from './components/PrivateRoute'
-import UpdateProfile from './components/UpdateProfile'
-import Checkout from './components/checkout/Checkout'
-import Payment from './components/checkout/Payment'
+import { AuthProvider } from '../contexts/authcontext'
+import data from '../data' // mock data
+import Cart from './Cart'
+import Header from './Header'
+import Main from './Main'
+import Login from './Login'
+import Profile from './Profile'
+import Signup from './Signup'
+import PwReset from './PwReset'
+import PrivateRoute from './PrivateRoute'
+import UpdateProfile from './UpdateProfile'
+import Success from './Success'
+import Failed from './Failed'
 
 function App() {
   const {products} = data
@@ -76,11 +76,11 @@ function App() {
             <Route path="/pwReset">
               <PwReset />
             </Route>
-            <Route path="/checkout">
-              <Checkout />
+            <Route path="/success">
+              <Success />
             </Route>
-            <Route path="/payment">
-              <Payment />
+            <Route path="/failed">
+              <Failed />
             </Route>
           </Switch>
           <Cart onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} />

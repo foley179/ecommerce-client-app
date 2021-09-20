@@ -3,19 +3,19 @@ const data = {
         {
             id: 1,
             name: "laptop",
-            price: 1000,
+            price: 100000,
             image: "./resources/laptop.jpg"
         },
         {
             id: 2,
             name: "mouse",
-            price: 10,
+            price: 1000,
             image: "./resources/mouse.jpg"
         },
         {
             id: 3,
             name: "keyboard",
-            price: 30,
+            price: 3000,
             image: "./resources/keyboard.jpg"
         }
     ],

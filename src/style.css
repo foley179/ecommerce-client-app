@@ -55,6 +55,9 @@ strong {
 .text-right {
     text-align: right;
 }
+.text-center {
+    text-align: center;
+}
 /* buttons */
 .button {
     font-size: 0.8rem;
