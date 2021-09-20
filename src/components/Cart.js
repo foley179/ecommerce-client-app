@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
 export default function Cart(props) {
     const {cartItems, onAdd, onRemove} = props
@@ -37,9 +38,11 @@ export default function Cart(props) {
                     <div className="col-1"><strong>Total</strong></div>
                     <div className="col-2 text-right"><strong>£{totalPrice.toFixed(2)}</strong></div>
                 </div>
-                <div className="row">
-                    <button className="button">Checkout</button> {/* need an onClick */}
-                </div>
+                <Link to="/checkout">
+                    <div className="row">
+                        <button className="button">Checkout</button>
+                    </div>
+                </Link>
                 </>
             )}
         </aside>
