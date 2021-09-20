@@ -51,6 +51,11 @@ function App() {
     }
   }
 
+  function emptyCart() {
+    // for purchase success
+    setCartItems([])
+  }
+
   // render
   return (
     <Router>
@@ -83,7 +88,7 @@ function App() {
               <Failed />
             </Route>
           </Switch>
-          <Cart onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} />
+          <Cart onAdd={onAdd} onRemove={onRemove} emptyCart={emptyCart} cartItems={cartItems} />
         </div>
       </AuthProvider>
     </Router>

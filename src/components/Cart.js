@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== "production") {
 
 export default function Cart(props) {
     const history = useHistory()
-    const {cartItems, onAdd, onRemove} = props
+    const {cartItems, onAdd, onRemove, emptyCart} = props
     const itemsPrice = cartItems.reduce((acc, cur) => acc + (cur.price * cur.qty), 0)
     const shippingPrice = itemsPrice > 199900 ? 0 : 3000
     const totalPrice = itemsPrice + shippingPrice
@@ -27,6 +27,7 @@ export default function Cart(props) {
         // retreive status from the response
         const {status} = response.data
         if (status === "success") {
+            emptyCart()
             history.push("/success")
         } else {
             history.push("/failed")
