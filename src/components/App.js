@@ -1,7 +1,7 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import axios from 'axios'
 import { AuthProvider } from '../contexts/authcontext'
-import data from '../data' // mock data
 import Cart from './Cart'
 import Header from './Header'
 import Main from './Main'
@@ -15,8 +15,20 @@ import Success from './Success'
 import Failed from './Failed'
 
 function App() {
-  const {products} = data
   const [cartItems, setCartItems] = useState([])
+  const [products, setProducts] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  async function getProducts() {
+    const products = await axios.get("http://localhost:4000/products")
+    setProducts(products.data)
+    setIsLoading(false)
+    return
+  }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   // functions
   function onAdd(product) {
@@ -55,7 +67,6 @@ function App() {
     // for purchase success
     setCartItems([])
   }
-
   // render
   return (
     <Router>
@@ -64,7 +75,7 @@ function App() {
         <div className="row">
           <Switch>
             <Route exact path="/">
-              <Main onAdd={onAdd} products={products} />
+                <Main onAdd={onAdd} products={products} isLoading={isLoading} />
             </Route>
             <PrivateRoute path="/profile">
               <Profile />

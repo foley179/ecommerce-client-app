@@ -7,6 +7,7 @@ const express = require('express')
 const cors = require('cors')
 const Stripe = require('stripe')
 const {v4 : uuidv4} = require('uuid')
+const pool = require("./db")
 
 if (process.env.NODE_ENV !== "production") {
     // use .env if in development state
@@ -22,9 +23,15 @@ app.use(cors())
 app.use(express.json())
 
 //routes
-app.get("/", (req, res) => {
-    // for testing
-    console.log("get request")
+app.get("/products", async (req, res) => {
+    console.log("get request") // for testing
+    try {
+        const products = await pool.query("SELECT * FROM products")
+        res.json(products.rows)
+    } catch (error) {
+        console.error(error.message)
+    }
+
 })
 
 app.post("/checkout", async (req, res) => {
