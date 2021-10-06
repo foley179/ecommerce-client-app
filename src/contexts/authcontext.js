@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import data from '../data' // mock data
+import axios from 'axios'
 
 const AuthContext = React.createContext()
 
@@ -11,22 +11,24 @@ export function useAuth() {
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(null)
 
-    const {users} = data // mock data
-
-    function login(email, password) {
+    async function login(email, password) {
         console.log("login attempt") // only for testing
         // for testing purposes, this will be removed and changed for a proper validation
-        const user = users.filter((item) => (email === item.email))
-        if (user.length === 0 || user[0].password !== password) {
-            throw Error("Email or password incorrect please try again")
-        } else {
-            setCurrentUser(user[0])
+        try {
+            const user = await axios.post("http://localhost:4000/users/login", {
+                email: email,
+                password: password
+            })
+            setCurrentUser(user)
             return currentUser
+        } catch (error) {
+            throw new Error("Invalid User or Password please try again.")
         }
     }
 
     function signup(username, email, password) {
         console.log("signup attempt") // for testing
+        /*
         const exist = users.filter((item) => (email === item.email))
         if (exist.length !== 0) {
             throw Error("user exists")
@@ -40,11 +42,12 @@ export function AuthProvider({children}) {
             users.push(user)
             setCurrentUser(user)
             return currentUser
-        }
+        }*/
     }
 
     function updateProfile(newUsername, newPassword, currUser) {
         console.log("update attempt")
+        /*
         let updatedUser
         try {
             if (newPassword === "") {
@@ -62,7 +65,7 @@ export function AuthProvider({children}) {
         }
         console.log("update user = " + updatedUser.username)
         setCurrentUser(updatedUser)
-        return currentUser
+        return currentUser*/
     }
 
     function logout() {

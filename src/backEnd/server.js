@@ -1,13 +1,10 @@
-//import express from 'express'
-//import cors from 'cors'
-//import Stripe from 'stripe'
-//import uuid from 'uuid/v4'
-// unsure why but import are causing errors when loading this server
+// unsure why but 'import' is causing errors when loading this server.js
 const express = require('express')
 const cors = require('cors')
 const Stripe = require('stripe')
 const {v4 : uuidv4} = require('uuid')
-const pool = require("./db")
+const sanitizeMiddleware = require("sanitize-middleware")
+const pool = require("./pool")
 
 if (process.env.NODE_ENV !== "production") {
     // use .env if in development state
@@ -20,10 +17,18 @@ const app = express() // setup express
 
 // middlewares
 app.use(cors())
+app.use(sanitizeMiddleware())
 app.use(express.json())
 
-//routes
+function hash_and_salt() {
+    // for passwords
+}
+
+// routes
+
+// products
 app.get("/products", async (req, res) => {
+    // get products for <main>
     console.log("get request") // for testing
     try {
         const products = await pool.query("SELECT * FROM products")
@@ -31,10 +36,29 @@ app.get("/products", async (req, res) => {
     } catch (error) {
         console.error(error.message)
     }
-
 })
 
+// users
+app.post("/users/create", async (req, res) => {
+    // create user
+    res.send("created user") // testing only
+})
+
+app.post("/users/login", async (req, res) => {
+    // check pw and retreive user
+    const mockUser = {username: "user1", email: "eg@eg.com"}
+    res.send(mockUser) // testing only
+})
+
+app.put("/users/:id", async (req, res) => {
+    // update users info
+    res.send("updated user") // testing only
+    // TODO: find out how to change by id
+})
+
+// checkout
 app.post("/checkout", async (req, res) => {
+    // route for stripe checkout to run
     console.log("Request: ", req.body)
 
     let error
@@ -42,7 +66,7 @@ app.post("/checkout", async (req, res) => {
     try {
         const {totalPrice, cartItems, token} = req.body
 
-        // for description in charges info (below)
+        // for description in charges info on stripe account (used below)
         let description = ""
         if (cartItems.length === 1) {
             description = cartItems[0].name

@@ -6,7 +6,6 @@ import { useHistory } from "react-router"
 if (process.env.NODE_ENV !== "production") {
     // use .env if in development state
     require('dotenv').config()
-    console.log(process.env.REACT_APP_STRIPE_KEY_PUBLISHABLE)
 }
 
 export default function Cart(props) {
