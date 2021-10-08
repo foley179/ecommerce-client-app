@@ -20,18 +20,16 @@ export default function UpdateProfile() {
         if (passwordRef.current.value !== "") {
             if (passwordRef.current.value !== passwordConfirmRef.current.value) {
                 // need to change password empty part
-                console.log("passwords do not match")
                 setError("passwords do not match")
                 return
             }
-        } else {
-            try {
-                await updateProfile(usernameRef.current.value, passwordRef.current.value, currentUser)
-                history.push("/profile")
-                console.log("update successful " + currentUser.username) // testing
-            } catch (err) {
-                setError(err.message)
-            }
+        }
+        try {
+            await updateProfile(usernameRef.current.value, passwordRef.current.value, currentUser.data[0])
+            history.push("/profile")
+            console.log("update successful ", currentUser.data[0].username) // testing
+        } catch (err) {
+            setError(err.message)
         }
     }
 

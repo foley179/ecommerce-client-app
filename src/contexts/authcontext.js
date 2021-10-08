@@ -29,9 +29,9 @@ export function AuthProvider({children}) {
     async function signup(username, email, password) {
         console.log("signup attempt") // for testing
         
-        let exist
+        let newUser
         try {
-            exist = await axios.post("http://localhost:4000/users/create", {
+            newUser = await axios.post("http://localhost:4000/users/create", {
                 username: username,
                 email: email,
                 password: password // TODO: hash and salt
@@ -39,31 +39,28 @@ export function AuthProvider({children}) {
         } catch (error) {
             throw new Error(error.message)
         }
-        setCurrentUser(exist)
+        setCurrentUser(newUser)
         return currentUser
     }
 
-    function updateProfile(newUsername, newPassword, currUser) {
+    async function updateProfile(newUsername, newPassword, currUser) {
         console.log("update attempt")
-        /*
+        
         let updatedUser
         try {
-            if (newPassword === "") {
-                updatedUser = {...currUser, username: newUsername}
-                users.map((user) => currUser.id !== user.id ? user : updatedUser)
-            } else if(newUsername === "") {
-                updatedUser = {...currUser, password: newPassword}
-                users.map((user) => currUser.id !== user.id ? user : updatedUser)
-            } else {
-                updatedUser = {...currUser, username: newUsername, password: newPassword}
-                users.map((user) => currUser.id !== user.id ? user : updatedUser)
-            }
+            updatedUser = await axios.put("http://localhost:4000/users/update", {
+                currUser: {
+                    ...currUser
+                },
+                username: newUsername,
+                password: newPassword // TODO: hash and salt
+            })
         } catch {
             throw new Error("Error updating profile please try again")
         }
-        console.log("update user = " + updatedUser.username)
+        console.log("update user = ", updatedUser.data[0])
         setCurrentUser(updatedUser)
-        return currentUser*/
+        return currentUser
     }
 
     function logout() {

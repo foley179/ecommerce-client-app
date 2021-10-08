@@ -76,10 +76,43 @@ app.post("/users/login", async (req, res) => {
     }
 })
 
-app.put("/users/:id", async (req, res) => {
+app.put("/users/update", async (req, res) => {
+    console.log("users/update")
     // update users info
-    res.send("updated user") // testing only
-    // TODO: find out how to change by id
+    const currUser = req.body.currUser
+    const updatedUserDetails = req.body
+    let currUserId
+    let updatedUser
+
+    try {
+        currUserId = await pool.query("SELECT id FROM users WHERE email = $1", [currUser.email])
+    } catch (error) {
+        console.log(error.message)
+        return
+    }
+
+    try {
+        if (updatedUserDetails.username !== "" && updatedUserDetails.password !== "") { // both changed
+            updatedUser = await pool.query(
+                "UPDATE users SET username = $1 AND password = $2 WHERE id = $3 RETURNING username, email",
+                [updatedUserDetails.username, updatedUserDetails.password, currUserId.rows[0].id]
+            ) 
+        } else if (updatedUserDetails.username !== "") { // new username only
+            updatedUser = await pool.query(
+                "UPDATE users SET username = $1 WHERE id = $2 RETURNING username, email",
+                [updatedUserDetails.username, currUserId.rows[0].id]
+            ) 
+        } else if (updatedUserDetails.password !== "") { // new password only
+            updatedUser = await pool.query(
+                "UPDATE users SET password = $1 WHERE id = $2 RETURNING username, email",
+                [updatedUserDetails.password, currUserId.rows[0].id]
+            ) 
+        }
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+    console.log(updatedUser)
+    res.send(updatedUser.rows)
 })
 
 // checkout
