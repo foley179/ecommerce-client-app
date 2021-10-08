@@ -14,35 +14,33 @@ export function AuthProvider({children}) {
     async function login(email, password) {
         console.log("login attempt") // only for testing
         // for testing purposes, this will be removed and changed for a proper validation
-        try {
-            const user = await axios.post("http://localhost:4000/users/login", {
-                email: email,
-                password: password
-            })
+        const user = await axios.post("http://localhost:4000/users/login", {
+            email: email,
+            password: password // TODO: hash and salt
+        })
+        if(user.data[0]) {
             setCurrentUser(user)
             return currentUser
-        } catch (error) {
-            throw new Error("Invalid User or Password please try again.")
+        } else {
+            throw new Error("Invalid Email or Password please try again.")
         }
     }
 
-    function signup(username, email, password) {
+    async function signup(username, email, password) {
         console.log("signup attempt") // for testing
-        /*
-        const exist = users.filter((item) => (email === item.email))
-        if (exist.length !== 0) {
-            throw Error("user exists")
-        } else {
-            const user = {
-                id: users.length + 1,
+        
+        let exist
+        try {
+            exist = await axios.post("http://localhost:4000/users/create", {
                 username: username,
                 email: email,
-                password: password // to be hashed & salted
-            }
-            users.push(user)
-            setCurrentUser(user)
-            return currentUser
-        }*/
+                password: password // TODO: hash and salt
+            })
+        } catch (error) {
+            throw new Error(error.message)
+        }
+        setCurrentUser(exist)
+        return currentUser
     }
 
     function updateProfile(newUsername, newPassword, currUser) {

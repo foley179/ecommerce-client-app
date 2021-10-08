@@ -35,19 +35,45 @@ app.get("/products", async (req, res) => {
         res.json(products.rows)
     } catch (error) {
         console.error(error.message)
+        res.status(400).send(error.message)
     }
 })
 
 // users
 app.post("/users/create", async (req, res) => {
     // create user
-    res.send("created user") // testing only
+    // TODO: hash PW BEFORE saving
+    const user = req.body
+    const exist = await pool.query("SELECT email FROM users WHERE $1 = users.email", [user.email])
+
+    if (exist.rows[0]) {
+        console.log("users/create user exists")
+        res.status(400).send("user exists")
+    } else {
+        try {
+            const newUser = await pool.query(
+                "INSERT INTO users(username, email, password) VALUES($1, $2, $3) RETURNING username, email",
+                [user.username, user.email, user.password]
+            )
+            res.send(newUser.rows)
+        } catch (error) {
+            res.status(400).send("error creating user try again")
+        }
+    }
 })
 
 app.post("/users/login", async (req, res) => {
     // check pw and retreive user
-    const mockUser = {username: "user1", email: "eg@eg.com"}
-    res.send(mockUser) // testing only
+    // TODO: create hash & salt func and hash the pw BEFORE checking
+    const user = await pool.query(
+        "SELECT username, email FROM users WHERE $1 = users.email AND $2 = users.password", 
+        [req.body.email, req.body.password]
+    )
+    if (user.rows[0]) {
+        res.send(user.rows)
+    } else {
+        res.send(new Error("error retreiving user"))
+    }
 })
 
 app.put("/users/:id", async (req, res) => {

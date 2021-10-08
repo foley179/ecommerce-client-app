@@ -22,8 +22,8 @@ export default function Signup() {
         }
         try {
             await signup(usernameRef.current.value, emailRef.current.value, passwordRef.current.value)
-            history.push("/profile")
             console.log("signup successful") // testing
+            history.push("/profile")
         } catch (err) {
             // using log because error is not showing
             console.log("errormessage: " + err.message)
