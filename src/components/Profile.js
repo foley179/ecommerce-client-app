@@ -6,8 +6,8 @@ export default function Profile() {
 
     return (
         <main className="block col-2 profile">
-            <h2>{currentUser.username}'s Profile Page</h2>
-            <h3>Email: {currentUser.email}</h3>
+            <h2>{currentUser.data.username}'s Profile Page</h2>
+            <h3>Email: {currentUser.data.email}</h3>
             <Link to="/updateProfile"><button className="loginbutton button">Edit Profile</button></Link>
         </main>
     )

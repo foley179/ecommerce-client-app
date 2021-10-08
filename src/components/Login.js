@@ -14,7 +14,7 @@ export default function Login() {
         e.preventDefault()
         try {
             await login(emailRef.current.value, passwordRef.current.value)
-            history.push("/profile") // causing warnings but not sure how to fix
+            history.push("/profile")
             console.log("login successful") // testing
         } catch (err) {
             setError(err.message)
