@@ -13,6 +13,7 @@ import PrivateRoute from './PrivateRoute'
 import UpdateProfile from './UpdateProfile'
 import Success from './Success'
 import Failed from './Failed'
+import ResetPassword from './ResetPassword'
 
 function App() {
     const [cartItems, setCartItems] = useState([])
@@ -98,6 +99,9 @@ function App() {
                         </Route>
                         <Route path="/failed">
                             <Failed />
+                        </Route>
+                        <Route path="/resetPassword">
+                            <ResetPassword />
                         </Route>
                     </Switch>
                     <Cart onAdd={onAdd} onRemove={onRemove} emptyCart={emptyCart} cartItems={cartItems} />

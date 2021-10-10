@@ -16,7 +16,7 @@ export function AuthProvider({children}) {
         // for testing purposes, this will be removed and changed for a proper validation
         const user = await axios.post("http://localhost:4000/users/login", {
             email: email,
-            password: password // TODO: hash and salt
+            password: password 
         })
         if(user.data[0]) {
             setCurrentUser(user)
@@ -34,7 +34,7 @@ export function AuthProvider({children}) {
             newUser = await axios.post("http://localhost:4000/users/create", {
                 username: username,
                 email: email,
-                password: password // TODO: hash and salt
+                password: password 
             })
         } catch (error) {
             throw new Error(error.message)
@@ -44,7 +44,7 @@ export function AuthProvider({children}) {
     }
 
     async function updateProfile(newUsername, newPassword, currUser) {
-        console.log("update attempt")
+        console.log("update attempt") // testing
         
         let updatedUser
         try {
@@ -53,7 +53,7 @@ export function AuthProvider({children}) {
                     ...currUser
                 },
                 username: newUsername,
-                password: newPassword // TODO: hash and salt
+                password: newPassword 
             })
         } catch {
             throw new Error("Error updating profile please try again")
@@ -68,6 +68,33 @@ export function AuthProvider({children}) {
         setCurrentUser(null)
         return currentUser
     }
+    
+    async function forgotPassword(email) {
+        console.log("useContext, forgotPassword func :", email)
+        try {
+            await axios.post("http://localhost:4000/forgot-password", {
+                email: email
+            })
+            return currentUser
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
+
+    async function updatePassword(password, id, token) {
+        console.log("useContext, resetPassword func :")
+        try {
+            const user = await axios.post("http://localhost:4000/reset-password", {
+                password: password,
+                id: id,
+                token: token
+            })
+            setCurrentUser(user)
+            return currentUser
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
 
     // exports these out to be used in other components
     const value = {
@@ -75,7 +102,9 @@ export function AuthProvider({children}) {
         login,
         logout,
         updateProfile,
-        signup
+        signup,
+        updatePassword,
+        forgotPassword
     }
 
     return (
