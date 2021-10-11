@@ -3,12 +3,9 @@
 
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots](#screenshots)
 * [Technologies](#technologies)
-* [Setup](#setup)
 * [Features](#features)
 * [Status](#status)
-* [Inspiration](#inspiration)
 * [Contact](#contact)
 
 ## General info
@@ -27,12 +24,11 @@ A project for a full stack engineer course from codecademy.
 * constantly updating cart
 
 ## To-do list:
-* Add a database
-* Add an API to connect front and back end
-* Filter for "testing" in code and delete where appropriate
+* Set "reset password" functionality to send actual emails
+* Filter for "testing" & "TODO" in code and delete/fix where appropriate
 
 ## Status
 Project is: _in progress_
 
 ## Contributors
-foley179 & amirfakhrullah
+foley179
