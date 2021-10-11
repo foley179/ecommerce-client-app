@@ -16,7 +16,11 @@ import Failed from './Failed'
 import ResetPassword from './ResetPassword'
 
 function App() {
-    const [cartItems, setCartItems] = useState([])
+    let localStorageCart = JSON.parse(localStorage.getItem("cartItems"))
+    if (localStorageCart === null) {
+        localStorageCart = []
+    }
+    const [cartItems, setCartItems] = useState(localStorageCart)
     const [products, setProducts] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     
@@ -26,11 +30,16 @@ function App() {
         setIsLoading(false)
         return
     }
+
+    useEffect(() => {
+        console.log("effect cartItems = ", cartItems)
+        localStorage.setItem("cartItems", JSON.stringify(cartItems))
+    }, [cartItems])
     
     useEffect(() => {
         getProducts()
     }, [])
-    
+
     // functions
     function onAdd(product) {
         // adding product to cart
@@ -45,7 +54,7 @@ function App() {
             setCartItems([...cartItems, {...product, qty: 1}])
         }
     }
-        
+
     function onRemove(product) {
         // removing product from cart
         const exist = cartItems.find((x) => x.id === product.id)
@@ -67,6 +76,7 @@ function App() {
     function emptyCart() {
         // for purchase success
         setCartItems([])
+        localStorage.setItem("cartItems", JSON.stringify(cartItems))
     }
 
     // render
