@@ -6,6 +6,7 @@ const {v4 : uuidv4} = require('uuid')
 const sanitizeMiddleware = require("sanitize-middleware")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const nodemailer = require("nodemailer")
 const pool = require("./pool")
 
 if (process.env.NODE_ENV !== "production") {
@@ -155,9 +156,29 @@ app.post("/forgot-password", async (req, res) => {
                 expiresIn: "15m"
             })
             const link = `HTTP://localhost:3000/resetPassword/${exist.rows[0].id}/${token}`
+
             // TODO: send email here
-            console.log(link) // link will show inconsole to click on for testing
-            res.send("Password link has been sent, check your emails")
+            const transporter = nodemailer.createTransport({
+                service: "hotmail",
+                auth: {
+                    user: process.env.REACT_APP_EMAIL,
+                    pass: process.env.REACT_APP_EMAIL_PASSWORD
+                }
+            })
+            const options = {
+                from: process.env.REACT_APP_EMAIL,
+                to: email,
+                subject: "Password reset request",
+                text: `Please follow the link below to reset you password.\n${link}`
+            }
+            transporter.sendMail(options, (err, info) => {
+                if (err) {
+                    console.log(err.message) // this would normally save to error log file
+                } else {
+                    console.log(info.response)
+                }
+            })
+            res.send()
         } else {
             throw new Error("No user with that email")
         }
