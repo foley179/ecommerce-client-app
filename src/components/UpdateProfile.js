@@ -27,7 +27,6 @@ export default function UpdateProfile() {
         try {
             await updateProfile(usernameRef.current.value, passwordRef.current.value, currentUser.data[0])
             history.push("/profile")
-            console.log("update successful ", currentUser.data[0].username) // testing
         } catch (err) {
             setError(err.message)
         }

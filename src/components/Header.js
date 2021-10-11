@@ -8,14 +8,8 @@ export default function Header() {
     // functions
     async function handleLogout(e) {
         e.preventDefault()
-        try {
-            history.push("/") // causes error if called after logout
-            await logout()
-            console.log("logout successful") // testing
-        } catch (err) {
-            // using log because error is not showing
-            console.log("logout unsuccessful")
-        }
+        await logout()
+        history.push("/") 
     }
 
     return (

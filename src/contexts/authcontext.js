@@ -12,8 +12,6 @@ export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(null)
 
     async function login(email, password) {
-        console.log("login attempt") // only for testing
-        // for testing purposes, this will be removed and changed for a proper validation
         const user = await axios.post("http://localhost:4000/users/login", {
             email: email,
             password: password 
@@ -27,7 +25,6 @@ export function AuthProvider({children}) {
     }
 
     async function signup(username, email, password) {
-        console.log("signup attempt") // for testing
         
         let newUser
         try {
@@ -44,7 +41,6 @@ export function AuthProvider({children}) {
     }
 
     async function updateProfile(newUsername, newPassword, currUser) {
-        console.log("update attempt") // testing
         
         let updatedUser
         try {
@@ -58,19 +54,16 @@ export function AuthProvider({children}) {
         } catch {
             throw new Error("Error updating profile please try again")
         }
-        console.log("update user = ", updatedUser.data[0])
         setCurrentUser(updatedUser)
         return currentUser
     }
 
     function logout() {
-        console.log("logged out") // for testing
         setCurrentUser(null)
         return currentUser
     }
     
     async function forgotPassword(email) {
-        console.log("useContext, forgotPassword func :", email)
         try {
             await axios.post("http://localhost:4000/forgot-password", {
                 email: email
@@ -82,7 +75,6 @@ export function AuthProvider({children}) {
     }
 
     async function updatePassword(password, id, token) {
-        console.log("useContext, resetPassword func :")
         try {
             const user = await axios.post("http://localhost:4000/reset-password", {
                 password: password,

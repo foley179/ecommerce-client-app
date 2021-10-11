@@ -15,7 +15,6 @@ export default function Login() {
         try {
             await login(emailRef.current.value, passwordRef.current.value)
             history.push("/profile")
-            console.log("login successful") // testing
         } catch (err) {
             setError(err.message)
         }

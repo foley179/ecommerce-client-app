@@ -15,18 +15,13 @@ export default function Signup() {
     async function handleSubmit(e) {
         e.preventDefault()
         if (passwordRef.current.value !== passwordConfirmRef.current.value || passwordRef.current.value === "") {
-            // need to change password empty part
-            console.log("passwords do not match")
             setError("passwords do not match")
             return
         }
         try {
             await signup(usernameRef.current.value, emailRef.current.value, passwordRef.current.value)
-            console.log("signup successful") // testing
             history.push("/profile")
         } catch (err) {
-            // using log because error is not showing
-            console.log("errormessage: " + err.message)
             setError("login unsuccessful")
         }
     }
@@ -36,7 +31,6 @@ export default function Signup() {
             <h2>Signup</h2>
             <hr />
             <form onSubmit={handleSubmit}>
-                {/* error does not work, cannot currently find work around */}
                 {error !== null ? <div className="loginError">{error}</div> : ""}
                 <input type="text" placeholder="Enter A Username" className="txt" required ref={usernameRef} />
                 <input type="email" placeholder="Enter Your Email" className="txt" required ref={emailRef} />

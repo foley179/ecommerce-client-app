@@ -16,7 +16,6 @@ export default function PwReset() {
         } catch (error) {
             setError("Error sending email. Please try again")
         }
-        console.log("Sending Email") // testing
     }
 
     if (emailSent) {

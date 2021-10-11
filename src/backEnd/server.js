@@ -33,6 +33,20 @@ async function compareHash(password, hash) {
     return await bcrypt.compare(password, hash)
 }
 
+async function findUser(email) {
+    // check if user exists
+    try {
+        const exist = await pool.query("SELECT email FROM users WHERE $1 = users.email", [email])
+        if(exist.rows[0]) {
+            return exist.rows[0]
+        } else {
+            return null
+        }
+    } catch (error) {
+        return error
+    }
+}
+
 // routes
 
 // products
@@ -42,7 +56,6 @@ app.get("/products", async (req, res) => {
         const products = await pool.query("SELECT * FROM products")
         res.json(products.rows)
     } catch (error) {
-        console.error(error.message)
         res.status(400).send(error.message)
     }
 })
@@ -50,11 +63,10 @@ app.get("/products", async (req, res) => {
 // users
 app.post("/users/create", async (req, res) => {
     // create user
-    console.log("users/create") // testing
     const user = req.body
     let exist
     try {
-        exist = await pool.query("SELECT email FROM users WHERE $1 = users.email", [user.email])
+        exist = await findUser(user.email)
     } catch (error) {
         res.send(404).send(error.message)
     }
@@ -76,14 +88,20 @@ app.post("/users/create", async (req, res) => {
 })
 
 app.post("/users/login", async (req, res) => {
-    // TODO: refactor this, a check if user exists should be done before retreiving password
     // check pw and retreive user
-    console.log("users/login") //testing
-    // TODO: verify stored hash exists
+
+    const exist = findUser(req.body.email)
+    if(!exist) {
+        res.status(404).send()
+    }
+    
     const storedHash = await pool.query(
         "SELECT password FROM users WHERE email = $1",
         [req.body.email]
     )
+    if (!storedHash) {
+        res.status(404).send()
+    }
     const authenticate = await compareHash(req.body.password, storedHash.rows[0].password)
 
     if (authenticate) {
@@ -102,7 +120,6 @@ app.post("/users/login", async (req, res) => {
 })
 
 app.put("/users/update", async (req, res) => {
-    console.log("users/update") // testing
     // update users info
     const currUser = req.body.currUser
     const updatedUserDetails = req.body
@@ -157,7 +174,6 @@ app.post("/forgot-password", async (req, res) => {
             })
             const link = `HTTP://localhost:3000/resetPassword/${exist.rows[0].id}/${token}`
 
-            // TODO: send email here
             const transporter = nodemailer.createTransport({
                 service: "hotmail",
                 auth: {
@@ -174,9 +190,9 @@ app.post("/forgot-password", async (req, res) => {
             transporter.sendMail(options, (err, info) => {
                 if (err) {
                     console.log(err.message) // this would normally save to error log file
-                } else {
+                }/* else {
                     console.log(info.response)
-                }
+                } for testing */
             })
             res.send()
         } else {
@@ -208,7 +224,6 @@ app.post("/reset-password", async (req, res) => {
                 res.send(user.rows)
             }
         } catch (error) {
-            console.log(error.message) // testing
             res.status(404).send(error.message)
         }
     } else {
@@ -219,7 +234,6 @@ app.post("/reset-password", async (req, res) => {
 // checkout
 app.post("/checkout", async (req, res) => {
     // route for stripe checkout to run
-    console.log("/checkout") // testing
 
     let error
     let status
@@ -235,7 +249,7 @@ app.post("/checkout", async (req, res) => {
         }
 
         // create a customer (details can be found on your stripe account after purchase)
-        // currently creating dupes TODO: must fix
+        // currently creating dupes TODO: upgrade check (current version deprecated)
         const customer = await stripe.customers.create({
             email: token.email,
             source: token.id
@@ -262,10 +276,8 @@ app.post("/checkout", async (req, res) => {
         }, { // 2nd arg to stripe.charges.create, sending the uuid
             idempotencyKey
         })
-        console.log("charge: ", charge)
         status = "success"
     } catch (error) {
-        console.log("error: ", error)
         status = "failure"
     }
     res.json({status, error})
