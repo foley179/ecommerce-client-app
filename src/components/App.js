@@ -32,7 +32,6 @@ function App() {
     }
 
     useEffect(() => {
-        console.log("effect cartItems = ", cartItems)
         localStorage.setItem("cartItems", JSON.stringify(cartItems))
     }, [cartItems])
     
