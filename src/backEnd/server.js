@@ -240,7 +240,7 @@ app.post("/checkout", async (req, res) => {
     try {
         const {totalPrice, cartItems, token} = req.body
 
-        // for description in" charges info" on stripe account (used below)
+        // for description in "charges info" on stripe account (used below)
         let description = ""
         if (cartItems.length === 1) {
             description = cartItems[0].name
@@ -249,7 +249,7 @@ app.post("/checkout", async (req, res) => {
         }
 
         // create a customer (details can be found on your stripe account after purchase)
-        // currently creating dupes TODO: upgrade check (current version deprecated)
+        // currently creating dupes TODO: upgrade checkout (current version deprecated)
         const customer = await stripe.customers.create({
             email: token.email,
             source: token.id
@@ -257,7 +257,7 @@ app.post("/checkout", async (req, res) => {
 
         const idempotencyKey = uuidv4() // prevents user being charged twice
         // create the charge sent to users card
-        const charge = await stripe.charges.create({
+        await stripe.charges.create({
             amount: totalPrice,
             currency: "GBP",
             customer: customer.id,
