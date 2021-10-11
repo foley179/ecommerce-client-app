@@ -16,7 +16,7 @@ export default function Header() {
         <header className="row block">
             <div>
                 <Link to="/">
-                    <h1>Small Shopping Cart</h1>
+                    <h1 className="header">Small PC Shop</h1>
                 </Link>
             </div>
             <div className="center">

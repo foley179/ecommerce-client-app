@@ -28,6 +28,9 @@ hr {
 strong {
     font-size: 1.1rem;
 }
+.header {
+    color: black;
+}
 /* position */
 .row {
     display: flex;
