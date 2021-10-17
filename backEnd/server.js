@@ -285,7 +285,7 @@ app.post("/checkout", async (req, res) => {
     res.json({status, error})
 })
 
-app.get("*", (req, res) => {
+app.get("*", (req, res) => { // should send static .html file from build for any other requests
     res.sendFile(path.join(__dirname + "build/index.html"))
 })
 
