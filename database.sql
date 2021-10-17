@@ -11,7 +11,7 @@ CREATE TABLE products(
 );
 
 /* insert mock data into products table */
-INSERT INTO products(price, image)
+INSERT INTO products(name, price, image)
 VALUES('laptop', 100000, './resources/laptop.jpg'),
 VALUES('mouse', 1000, './resources/mouse.jpg'),
 VALUES('keyboard', 3000, './resources/keyboard.jpg');
