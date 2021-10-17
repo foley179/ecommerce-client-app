@@ -3,16 +3,15 @@ import axios from 'axios'
 
 const AuthContext = React.createContext()
 
-// helper func
-const prefix = process.env.NODE_ENV === 'production' ? "https://pern-ecommerce-app.herokuapp.com" : "http://localhost:4000"
-function getUrl(relativeUrl) {
-   return prefix + "/" + relativeUrl
-}
-
-
 // created hook
 export function useAuth() {
     return useContext(AuthContext)
+}
+
+// helper function
+const prefix = process.env.NODE_ENV === 'production' ? "https://pern-ecommerce-app.herokuapp.com" : "http://localhost:4000"
+function getUrl(relativeUrl) {
+   return prefix + "/" + relativeUrl;
 }
 
 export function AuthProvider({children}) {

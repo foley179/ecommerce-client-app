@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/foley179/ecommerce-client-app#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
-    "password-generator": "^2.3.2"
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.7.0",
+    "pg": "^8.7.1",
+    "sanitize-middleware": "^4.0.4"
   }
 }

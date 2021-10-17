@@ -23,13 +23,13 @@ function App() {
     const [cartItems, setCartItems] = useState(localStorageCart)
     const [products, setProducts] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
-
-    // helper func
+    
+    // helper function
     const prefix = process.env.NODE_ENV === 'production' ? "https://pern-ecommerce-app.herokuapp.com" : "http://localhost:4000"
     function getUrl(relativeUrl) {
-        return prefix + "/" + relativeUrl
+        return prefix + "/" + relativeUrl;
     }
-    
+
     async function getProducts() {
         const products = await axios.get(getUrl("products"))
         setProducts(products.data)
