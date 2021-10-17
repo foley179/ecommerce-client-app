@@ -14,18 +14,19 @@ A project for a full stack engineer course from codecademy.
 --------------------------------------------------------------
 
 ## Technologies
-* node.js
+* Node.js
 * HTML
 * CSS
 * React
 
 ## Features
-* login/out functionality
-* constantly updating cart
+* Login/out functionality
+* Reset password functionality
+* Constantly updating cart
+* payments with stripe (tests keys used so no payments are taken)
 
 ## To-do list:
-* Set "reset password" functionality to send actual emails
-* Filter for "testing" & "TODO" in code and delete/fix where appropriate
+* Upload to heroku and test
 
 ## Status
 Project is: _in progress_
