@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const pool = require("./pool")
+const path = require("path")
 
 if (process.env.NODE_ENV !== "production") {
     // use .env if in development state
@@ -22,6 +23,7 @@ const app = express() // setup express
 app.use(cors())
 app.use(sanitizeMiddleware())
 app.use(express.json())
+app.use(express.static(path.join(__dirname, "/build")))
 
 // helper funcs
 async function hashAndSalt(password) {
@@ -281,6 +283,10 @@ app.post("/checkout", async (req, res) => {
         status = "failure"
     }
     res.json({status, error})
+})
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "build/index.html"))
 })
 
 app.listen(4000, () => console.log("Simple server running on http://localhost:4000"))
