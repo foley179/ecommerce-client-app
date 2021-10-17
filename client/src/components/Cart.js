@@ -15,10 +15,16 @@ export default function Cart(props) {
     const shippingPrice = itemsPrice > 199900 ? 0 : 3000
     const totalPrice = itemsPrice + shippingPrice
 
+    // helper function
+    const prefix = process.env.NODE_ENV === 'production' ? "https://pern-ecommerce-app.herokuapp.com" : "http://localhost:4000"
+    function getUrl(relativeUrl) {
+        return prefix + "/" + relativeUrl;
+    }
+
     //functions
     async function handleToken(token) { // 2nd arg can be addresses but they are sent in the token in this project
         // creates a post request to the server
-        const response = await axios.post("http://localhost:4000/checkout", {
+        const response = await axios.post(getUrl("checkout"), {
             token,
             cartItems,
             totalPrice
