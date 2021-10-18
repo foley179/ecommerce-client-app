@@ -4,10 +4,8 @@ async function psqlQuery(query, params=[]) {
     let psql
     if (process.env.NODE_ENV === "production") {
         psql = new Client({
-            connectionString: process.env.DATABASE_URI,
-            ssl: {
-                rejectUnauthorised: false
-            }
+            connectionString: process.env.DATABASE_URL,
+            ssl: true
         })
     } else {
         psql = new Client({
