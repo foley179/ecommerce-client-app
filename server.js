@@ -72,29 +72,22 @@ app.get("/products", async (req, res) => {
 app.post("/users/create", async (req, res) => {
     // create user
     const user = req.body
-    let exist
     try {
         exist = await findUser(user.email)
-    } catch (error) {
-        console.log(error.message)
-        res.status(401).send(error.message)
-    }
-
-    if (exist.rows[0]) {
-        res.status(401).send()
-    } else {
-        try {
-            const hashedPw = await hashAndSalt(user.password)
-            const newUser = await psqlQuery(
-                "INSERT INTO users(username, email, password) VALUES($1, $2, $3) RETURNING username, email",
-                [user.username, user.email, hashedPw]
-            )
-            res.send(newUser.rows)
-        } catch (error) {
-            console.log(error.message)
+        if (!exist) {
             res.status(401).send()
         }
+        const hashedPw = await hashAndSalt(user.password)
+        const newUser = await psqlQuery(
+            "INSERT INTO users(username, email, password) VALUES($1, $2, $3) RETURNING username, email",
+            [user.username, user.email, hashedPw]
+        )
+        res.send(newUser.rows)
+    } catch (error) {
+        console.log(error.message)
+        res.status(401).send()
     }
+    
 })
 
 app.post("/users/login", async (req, res) => {
