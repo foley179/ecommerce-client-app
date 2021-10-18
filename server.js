@@ -28,7 +28,7 @@ const app = express() // setup express
 app.use(cors())
 app.use(sanitizeMiddleware())
 app.use(express.json())
-app.use(express.static(path.join(__dirname, "/build")))
+app.use(express.static(path.join(__dirname, "/client/build")))
 
 // helper funcs
 async function hashAndSalt(password) {
