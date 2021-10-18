@@ -42,6 +42,8 @@ function App() {
     }, [cartItems])
     
     useEffect(() => {
+        // react has a warning about this func not being in the array but i only want it to render on mount
+        // for now, i will change once a search bar is implemented
         getProducts()
     }, [])
 

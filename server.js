@@ -7,15 +7,18 @@ const sanitizeMiddleware = require("sanitize-middleware")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
-const pool = require("./pool")
+const psqlQuery = require("./psql")
 const path = require("path")
 
+const PORT = process.env.PORT || 4000
+
+let hostUrl = "pern-ecommerce-app.herokuapp.com"
 if (process.env.NODE_ENV !== "production") {
     // use .env if in development state
     require('dotenv').config()
+    // used for reset link
+    hostUrl = `localHost:${PORT}`
 }
-
-const PORT = process.env.PORT || 4000
 
 const stripe = Stripe(process.env.REACT_APP_STRIPE_KEY_SECRET) // setup stripe connection
 
@@ -40,7 +43,7 @@ async function compareHash(password, hash) {
 async function findUser(email) {
     // check if user exists
     try {
-        const exist = await pool.query("SELECT email FROM users WHERE $1 = users.email", [email])
+        const exist = await psqlQuery("SELECT email FROM users WHERE $1 = users.email", [email])
         if(exist.rows[0]) {
             return exist.rows[0]
         } else {
@@ -57,7 +60,7 @@ async function findUser(email) {
 app.get("/products", async (req, res) => {
     // get products for <main>
     try {
-        const products = await pool.query("SELECT * FROM products")
+        const products = await psqlQuery("SELECT * FROM products")
         res.json(products.rows)
     } catch (error) {
         res.status(400).send(error.message)
@@ -80,7 +83,7 @@ app.post("/users/create", async (req, res) => {
     } else {
         try {
             const hashedPw = await hashAndSalt(user.password)
-            const newUser = await pool.query(
+            const newUser = await psqlQuery(
                 "INSERT INTO users(username, email, password) VALUES($1, $2, $3) RETURNING username, email",
                 [user.username, user.email, hashedPw]
             )
@@ -99,7 +102,7 @@ app.post("/users/login", async (req, res) => {
         res.status(404).send()
     }
     
-    const storedHash = await pool.query(
+    const storedHash = await psqlQuery(
         "SELECT password FROM users WHERE email = $1",
         [req.body.email]
     )
@@ -109,7 +112,7 @@ app.post("/users/login", async (req, res) => {
     const authenticate = await compareHash(req.body.password, storedHash.rows[0].password)
 
     if (authenticate) {
-        const user = await pool.query(
+        const user = await psqlQuery(
             "SELECT username, email FROM users WHERE $1 = users.email", 
             [req.body.email]
         )
@@ -133,24 +136,24 @@ app.put("/users/update", async (req, res) => {
         if (updatedUserDetails.password !== "") {
             hashedPw = await hashAndSalt(updatedUserDetails.password)
         }
-        currUserId = await pool.query("SELECT id FROM users WHERE email = $1", [currUser.email])
+        currUserId = await psqlQuery("SELECT id FROM users WHERE email = $1", [currUser.email])
     } catch (error) {
         res.send(error.message)
     }
 
     try {
         if (updatedUserDetails.username !== "" && updatedUserDetails.password !== "") { // both changed
-            updatedUser = await pool.query(
+            updatedUser = await psqlQuery(
                 "UPDATE users SET username = $1 AND password = $2 WHERE id = $3 RETURNING username, email",
                 [updatedUserDetails.username, hashedPw, currUserId.rows[0].id]
             ) 
         } else if (updatedUserDetails.username !== "") { // new username only
-            updatedUser = await pool.query(
+            updatedUser = await psqlQuery(
                 "UPDATE users SET username = $1 WHERE id = $2 RETURNING username, email",
                 [updatedUserDetails.username, currUserId.rows[0].id]
-            ) 
+            )
         } else if (updatedUserDetails.password !== "") { // new password only
-            updatedUser = await pool.query(
+            updatedUser = await psqlQuery(
                 "UPDATE users SET password = $1 WHERE id = $2 RETURNING username, email",
                 [hashedPw, currUserId.rows[0].id]
             ) 
@@ -166,7 +169,7 @@ app.post("/forgot-password", async (req, res) => {
     const {email} = req.body
     let exist
     try {
-        exist = await pool.query("SELECT id, email, password FROM users WHERE $1 = users.email", [email])
+        exist = await psqlQuery("SELECT id, email, password FROM users WHERE $1 = users.email", [email])
         if (exist.rows[0]) {
             const jwtSecret = process.env.REACT_APP_JWT_SECRET + exist.rows[0].password
             const payload = {
@@ -176,7 +179,7 @@ app.post("/forgot-password", async (req, res) => {
             const token = jwt.sign(payload, jwtSecret, {
                 expiresIn: "15m"
             })
-            const link = `https://pern-ecommerce-app.herokuapp.com/resetPassword/${exist.rows[0].id}/${token}`
+            const link = `https://${hostUrl}/resetPassword/${exist.rows[0].id}/${token}`
 
             const transporter = nodemailer.createTransport({
                 service: "hotmail",
@@ -211,14 +214,14 @@ app.post("/reset-password", async (req, res) => {
     const {password, id, token} = req.body
 
     let user
-    const exist = await pool.query("SELECT email, password FROM users WHERE $1 = id", [id])
+    const exist = await psqlQuery("SELECT email, password FROM users WHERE $1 = id", [id])
 
     if (exist.rows[0]) {
         const jwtSecret = process.env.REACT_APP_JWT_SECRET + exist.rows[0].password
         try {
             jwt.verify(token, jwtSecret)
             const hashedPassword = await hashAndSalt(password)
-            user = await pool.query(
+            user = await psqlQuery(
                 "UPDATE users SET password = $1 WHERE id = $2 RETURNING username, email",
                 [hashedPassword, id]
             )
