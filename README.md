@@ -18,6 +18,8 @@ A project for a full stack engineer course from codecademy.
 * HTML
 * CSS
 * React
+* Express
+* Postgresql
 
 ## Features
 * Login/out functionality
@@ -26,10 +28,11 @@ A project for a full stack engineer course from codecademy.
 * payments with stripe (tests keys used so no payments are taken)
 
 ## To-do list:
-* Upload to heroku and test
+* Add more items & a search bar
+* Add SSO login (course)
 
 ## Status
-Project is: _in progress_
+Project is: _functional_
 
 ## Contributors
 foley179
