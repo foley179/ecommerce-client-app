@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/foley179/ecommerce-client-app/issues"
   },
-  "homepage": "https://github.com/foley179/ecommerce-client-app#readme",
+  "homepage": "https://pern-ecommerce-app.herokuapp.com/",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
