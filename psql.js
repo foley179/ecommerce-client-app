@@ -1,7 +1,7 @@
 const {Client} = require("pg")
 
 async function psqlQuery(query, params=[]) {
-    let psql
+/*    let psql
     if (process.env.NODE_ENV === "production") {
         psql = new Client({
             connectionString: process.env.DATABASE_URL,
@@ -12,7 +12,12 @@ async function psqlQuery(query, params=[]) {
             connectionString: `postgres://${process.env.REACT_APP_PSQL_USER}:${process.env.REACT_APP_PSQL_PASSWORD}@localhost:5432/pern_ecommerce_app`,
         })
     }
-    
+*/
+
+    const psql = new Client({
+        connectionString: process.env.DATABASE_URL,
+        ssl: true
+    })
     psql.connect()
     
     let output
