@@ -63,7 +63,8 @@ app.get("/products", async (req, res) => {
         const products = await psqlQuery("SELECT * FROM products")
         res.json(products.rows)
     } catch (error) {
-        res.status(400).send(error.message)
+        console.log(error.message)
+        res.status(404).send(error.message)
     }
 })
 
@@ -75,11 +76,12 @@ app.post("/users/create", async (req, res) => {
     try {
         exist = await findUser(user.email)
     } catch (error) {
-        res.send(404).send(error.message)
+        console.log(error.message)
+        res.status(401).send(error.message)
     }
 
     if (exist.rows[0]) {
-        res.status(400).send("user with that email exists")
+        res.status(401).send()
     } else {
         try {
             const hashedPw = await hashAndSalt(user.password)
@@ -89,7 +91,8 @@ app.post("/users/create", async (req, res) => {
             )
             res.send(newUser.rows)
         } catch (error) {
-            res.status(400).send("error creating user try again")
+            console.log(error.message)
+            res.status(401).send()
         }
     }
 })
@@ -97,33 +100,39 @@ app.post("/users/create", async (req, res) => {
 app.post("/users/login", async (req, res) => {
     // check pw and retreive user
 
-    const exist = findUser(req.body.email)
-    if(!exist) {
-        res.status(404).send()
-    }
-    
-    const storedHash = await psqlQuery(
-        "SELECT password FROM users WHERE email = $1",
-        [req.body.email]
-    )
-    if (!storedHash) {
-        res.status(404).send()
-    }
-    const authenticate = await compareHash(req.body.password, storedHash.rows[0].password)
-
-    if (authenticate) {
-        const user = await psqlQuery(
-            "SELECT username, email FROM users WHERE $1 = users.email", 
+    try {
+        const exist = await findUser(req.body.email)
+        if(!exist) {
+            res.status(401).send()
+        }
+        
+        const storedHash = await psqlQuery(
+            "SELECT password FROM users WHERE email = $1",
             [req.body.email]
         )
-        if (user.rows[0]) {
-            res.send(user.rows)
-        } else {
-            res.send(new Error("error retreiving user"))
+        if (storedHash.rows[0].length === 0) {
+            res.status(401).send()
         }
-    } else {
-        res.send(new Error("login attempt failed"))
+        const authenticate = await compareHash(req.body.password, storedHash.rows[0].password)
+
+        if (authenticate === true) {
+            const user = await psqlQuery(
+                "SELECT username, email FROM users WHERE $1 = users.email", 
+                [req.body.email]
+            )
+            if (user.rows[0]) {
+                res.send(user.rows)
+            } else {
+                res.status(401).send()
+            }
+        } else {
+            res.status(401).send()
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.status(401).send()
     }
+
 })
 
 app.put("/users/update", async (req, res) => {
@@ -138,7 +147,8 @@ app.put("/users/update", async (req, res) => {
         }
         currUserId = await psqlQuery("SELECT id FROM users WHERE email = $1", [currUser.email])
     } catch (error) {
-        res.send(error.message)
+        console.log(error.message)
+        res.status(400).send()
     }
 
     try {
@@ -159,7 +169,8 @@ app.put("/users/update", async (req, res) => {
             ) 
         }
     } catch (error) {
-        res.status(400).send(error.message)
+        console.log(error.message)
+        res.status(400).send()
     }
     res.send(updatedUser.rows)
 })
@@ -203,10 +214,11 @@ app.post("/forgot-password", async (req, res) => {
             })
             res.send()
         } else {
-            throw new Error("No user with that email")
+            res.status(400).send()
         }
     } catch (error) {
-        res.send(404).send(error.message)
+        console.log(error.message)
+        res.status(400).send()
     }
 })
 
@@ -231,10 +243,11 @@ app.post("/reset-password", async (req, res) => {
                 res.send(user.rows)
             }
         } catch (error) {
-            res.status(404).send(error.message)
+            console.log(error.message)
+            res.status(400).send()
         }
     } else {
-        res.status(404).send("no user with that id")
+        res.status(401).send()
     }
 })
 
@@ -285,6 +298,7 @@ app.post("/checkout", async (req, res) => {
         })
         status = "success"
     } catch (error) {
+        console.log(error.message)
         status = "failure"
     }
     res.json({status, error})
