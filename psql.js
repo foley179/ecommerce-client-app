@@ -5,9 +5,9 @@ async function psqlQuery(query, params=[]) {
     if (process.env.NODE_ENV === "production") {
         psql = new Client({
             connectionString: process.env.DATABASE_URL,
-            /*ssl: {
+            ssl: {
                 rejectUnauthorised: false
-            }*/
+            }
         })
     } else {
         psql = new Client({
